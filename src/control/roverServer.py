@@ -20,7 +20,7 @@ while True:
         if len(data) == 0:
             break
 
-        print("Received: %s" % data, data)
+        print("Received: %s" % data)
 
     except(KeyboardInterrupt, SystemExit):
         print("Closing socket")

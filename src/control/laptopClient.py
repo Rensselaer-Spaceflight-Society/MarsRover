@@ -6,6 +6,7 @@ import tkinter as tk
 client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
 # list bluetooth devices
+print("Searching for devices... this may take a while")
 devices = bluetooth.discover_devices()
 for i, device in enumerate(devices):
     print(i+1, bluetooth.lookup_name(device), device)
