@@ -11,11 +11,16 @@ print("Accepted connection from ", address)
 
 while True:
     try:
-        data = client_socket.recv(1024)
+        try:
+            data = client_socket.recv(1024)
+        except bluetooth.btcommon.BluetoothError as err:
+            print("Bluetooth Connection Lost or Terminated {}".format(err))
+            break
+
         if len(data) == 0:
             break
 
-        print("Received: %s" % data)
+        print("Received: %s" % data, data)
 
     except(KeyboardInterrupt, SystemExit):
         print("Closing socket")
