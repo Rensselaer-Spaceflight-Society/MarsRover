@@ -1,7 +1,16 @@
 import bluetooth
 
 client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-bluetooth_address = input("Enter the bluetooth address of the rover: ").strip()
+
+# list bluetooth devices
+devices = bluetooth.discover_devices()
+for i, device in enumerate(devices):
+    print(i+1, bluetooth.lookup_name(device), device)
+
+# connect to device
+device = int(input("Select device: "))
+bluetooth_address = devices[device-1]
+
 port = 1
 
 client_socket.connect((bluetooth_address, port))
@@ -11,8 +20,12 @@ while True:
         data = input()
         if len(data) == 0:
             break
-
-        client_socket.send(data)
+        
+        try:
+            client_socket.send(data)
+        except bluetooth.btcommon.BluetoothError as err:
+            print("Bluetooth Error: {}".format(err))
+            break
 
     except(KeyboardInterrupt, SystemExit):
         print("Closing socket")
