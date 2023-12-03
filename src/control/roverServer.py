@@ -11,7 +11,7 @@ print("Accepted connection from ", address)
 
 while True:
     try:
-        data = client_socket.receive(1024)
+        data = client_socket.recv(1024)
         if len(data) == 0:
             break
 
