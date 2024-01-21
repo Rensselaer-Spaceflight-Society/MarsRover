@@ -1,4 +1,5 @@
 import bluetooth
+import command 
 
 server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 server_socket.bind(("", bluetooth.PORT_ANY))
@@ -20,7 +21,8 @@ while True:
         if len(data) == 0:
             break
 
-        print("Received: %s" % data)
+        roverCommand = command.Command(data.decode("utf-8"))
+        print("Received: ", roverCommand)
 
     except(KeyboardInterrupt, SystemExit):
         print("Closing socket")

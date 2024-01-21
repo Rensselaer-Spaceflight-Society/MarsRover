@@ -1,2 +1,1 @@
-pkg-resources==0.0.0
-PyBluez==0.30
+PyBluez=="git+https://github.com/pybluez/pybluez.git#egg=pybluez"

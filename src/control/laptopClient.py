@@ -2,6 +2,7 @@
 
 import bluetooth
 import tkinter as tk
+import command
 
 client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
@@ -18,9 +19,9 @@ port = 1
 
 client_socket.connect((bluetooth_address, port))
 
-def dataSmartSend(client_socket, data) -> bool:
+def dataSmartSend(client_socket, command: command.Command) -> bool:
     try:
-        client_socket.send(data)
+        client_socket.send(str(command).encode("utf-8"))
         return True
     except bluetooth.btcommon.BluetoothError as err:
         print("Bluetooth Error: {}".format(err))
@@ -34,15 +35,24 @@ while True:
         window.geometry("200x200")
         window.configure(background="grey")
 
+        forwardCommand = command.Command("forward", "5")
+        backwardCommand = command.Command("backward", "5")
+        leftCommand = command.Command("left", "5")
+        rightCommand = command.Command("right", "5")
+
         # add 4 buttons to the window
-        forward = tk.Button(window, text="Forward", command=lambda: dataSmartSend(client_socket, "F"))
+        forward = tk.Button(window, text="Forward", command=lambda: dataSmartSend(client_socket, forwardCommand))
         forward.pack(side=tk.TOP)
-        left = tk.Button(window, text="Left", command=lambda: dataSmartSend(client_socket, "L"))
+        left = tk.Button(window, text="Left", command=lambda: dataSmartSend(client_socket, leftCommand))
         left.pack(side=tk.LEFT)
-        right = tk.Button(window, text="Right", command=lambda: dataSmartSend(client_socket, "R"))
+        right = tk.Button(window, text="Right", command=lambda: dataSmartSend(client_socket, rightCommand))
         right.pack(side=tk.RIGHT)
-        backward = tk.Button(window, text="Backward", command=lambda: dataSmartSend(client_socket, "B"))
+        backward = tk.Button(window, text="Backward", command=lambda: dataSmartSend(client_socket, backwardCommand))
         backward.pack(side=tk.BOTTOM)
+        commandInput = tk.input(window, text="Command")
+        commandInput.pack(side=tk.BOTTOM)
+        commandSend = tk.Button(window, text="Send", command=lambda: dataSmartSend(client_socket, command.Command(commandInput.get())))
+        commandSend.pack(side=tk.BOTTOM)
 
         window.mainloop()
 
