@@ -2,29 +2,31 @@ class Command:
     commandType: str
     commandArgs: "list[str]"
 
-    def __init__(self, commandString: str) -> None:
-        commandString = commandString.strip()
-        commandParts: "list[str]"
-        lastCommandPartIndex: int = 0
-        # Split the command string into a list of strings
-        for i in enumerate(commandString, 0):
-            if i[1] == " ":
-                commandParts.append(commandString[lastCommandPartIndex:i[0]])
-                lastCommandPartIndex = i[0]
-            elif i[1] == "\"":
-                # Find the next quote
-                commandString.find("\"", i[0])
-                # Add the string to the list
-                commandParts.append(commandString[lastCommandPartIndex:i[0]+1])
-                lastCommandPartIndex = i[0]+1
+    def __init__(self, commandString: str =None, commandType: str =None, commandArgs: "list[str]" =None) -> None:
         
-        self.commandType = commandParts[0]
-        self.commandArgs = commandParts[1:]
-        pass
-
-    def __init__ (self, commandType: str, commandArgs: "list[str]") -> None:
-        self.commandType = commandType
-        self.commandArgs = commandArgs
+        if commandType is not None and commandArgs is not None:
+            self.commandType = commandType
+            self.commandArgs = commandArgs
+            return
+        
+        if commandString is None:
+            commandString = commandString.strip()
+            commandParts: "list[str]"
+            lastCommandPartIndex: int = 0
+            # Split the command string into a list of strings
+            for i in enumerate(commandString, 0):
+                if i[1] == " ":
+                    commandParts.append(commandString[lastCommandPartIndex:i[0]])
+                    lastCommandPartIndex = i[0]
+                elif i[1] == "\"":
+                    # Find the next quote
+                    commandString.find("\"", i[0])
+                    # Add the string to the list
+                    commandParts.append(commandString[lastCommandPartIndex:i[0]+1])
+                    lastCommandPartIndex = i[0]+1
+            
+            self.commandType = commandParts[0]
+            self.commandArgs = commandParts[1:]
         pass
 
     def __str__(self) -> str:

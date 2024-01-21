@@ -35,10 +35,10 @@ while True:
         window.geometry("200x200")
         window.configure(background="grey")
 
-        forwardCommand = command.Command("forward", "5")
-        backwardCommand = command.Command("backward", "5")
-        leftCommand = command.Command("left", "5")
-        rightCommand = command.Command("right", "5")
+        forwardCommand = command.Command(commandType="forward", commandArgs=["5"])
+        backwardCommand = command.Command(commandType="backward", commandArgs=["5"])
+        leftCommand = command.Command(commandType="left", commandArgs=["5"])
+        rightCommand = command.Command(commandType="right", commandArgs=["5"])
 
         # add 4 buttons to the window
         forward = tk.Button(window, text="Forward", command=lambda: dataSmartSend(client_socket, forwardCommand))
@@ -51,7 +51,7 @@ while True:
         backward.pack(side=tk.BOTTOM)
         commandInput = tk.Text(window, height=1, width=10)
         commandInput.pack(side=tk.BOTTOM)
-        commandSend = tk.Button(window, text="Send", command=lambda: dataSmartSend(client_socket, command.Command(commandInput.get(1.0, "end-1c"))))
+        commandSend = tk.Button(window, text="Send", command=lambda: dataSmartSend(client_socket, command.Command(commandString=commandInput.get(1.0, "end-1c"))))
         commandSend.pack(side=tk.BOTTOM)
 
         window.mainloop()
