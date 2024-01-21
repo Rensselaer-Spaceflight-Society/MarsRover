@@ -9,22 +9,25 @@ class Command:
             self.commandArgs = commandArgs
             return
         
-        if commandString is None:
+        if commandString is not None:
+            print("raw string: ", commandString)
             commandString = commandString.strip()
-            commandParts: "list[str]"
+            commandParts: "list[str]" =[]
             lastCommandPartIndex: int = 0
             # Split the command string into a list of strings
             for i in enumerate(commandString, 0):
+                print(i)
                 if i[1] == " ":
                     commandParts.append(commandString[lastCommandPartIndex:i[0]])
-                    lastCommandPartIndex = i[0]
+                    lastCommandPartIndex = i[0]+1
                 elif i[1] == "\"":
                     # Find the next quote
                     commandString.find("\"", i[0])
                     # Add the string to the list
                     commandParts.append(commandString[lastCommandPartIndex:i[0]+1])
                     lastCommandPartIndex = i[0]+1
-            
+                    
+            commandParts.append(commandString[lastCommandPartIndex:])
             self.commandType = commandParts[0]
             self.commandArgs = commandParts[1:]
         pass

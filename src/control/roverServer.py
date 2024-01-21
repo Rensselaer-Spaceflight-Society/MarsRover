@@ -23,7 +23,7 @@ while True:
         if len(data) == 0:
             break
 
-        roverCommand = command.Command(data.decode("utf-8"))
+        roverCommand = command.Command(commandString=data.decode("utf-8"))
         print("Received: ", roverCommand)
 
     except(KeyboardInterrupt, SystemExit):
