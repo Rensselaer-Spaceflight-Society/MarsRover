@@ -1,10 +1,10 @@
 class Command:
     commandType: str
-    commandArgs: list[str]
+    commandArgs: "list[str]"
 
     def __init__(self, commandString: str) -> None:
         commandString = commandString.strip()
-        commandParts: list[str]
+        commandParts: "list[str]"
         lastCommandPartIndex: int = 0
         # Split the command string into a list of strings
         for i in enumerate(commandString, 0):
@@ -22,7 +22,7 @@ class Command:
         self.commandArgs = commandParts[1:]
         pass
 
-    def __init__ (self, commandType: str, commandArgs: list[str]) -> None:
+    def __init__ (self, commandType: str, commandArgs: "list[str]") -> None:
         self.commandType = commandType
         self.commandArgs = commandArgs
         pass
@@ -44,7 +44,7 @@ class Command:
     def get_command_type(self) -> str:
         return self.commandType
     
-    def get_command_args(self) -> list[str]:
+    def get_command_args(self) -> "list[str]":
         return self.commandArgs
     
     def get_command_arg(self, index: int) -> str:
