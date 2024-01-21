@@ -26,9 +26,10 @@ class Command:
                     # Add the string to the list
                     commandParts.append(commandString[lastCommandPartIndex:i[0]+1])
                     lastCommandPartIndex = i[0]+1
-                    
+
             commandParts.append(commandString[lastCommandPartIndex:])
             self.commandType = commandParts[0]
+            print(list(self.commandType))
             self.commandArgs = commandParts[1:]
         pass
 
