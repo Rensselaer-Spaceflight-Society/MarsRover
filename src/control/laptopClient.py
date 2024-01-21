@@ -49,9 +49,9 @@ while True:
         right.pack(side=tk.RIGHT)
         backward = tk.Button(window, text="Backward", command=lambda: dataSmartSend(client_socket, backwardCommand))
         backward.pack(side=tk.BOTTOM)
-        commandInput = tk.input(window, text="Command")
+        commandInput = tk.Text(window, height=1, width=10)
         commandInput.pack(side=tk.BOTTOM)
-        commandSend = tk.Button(window, text="Send", command=lambda: dataSmartSend(client_socket, command.Command(commandInput.get())))
+        commandSend = tk.Button(window, text="Send", command=lambda: dataSmartSend(client_socket, command.Command(commandInput.get(1.0, "end-1c"))))
         commandSend.pack(side=tk.BOTTOM)
 
         window.mainloop()

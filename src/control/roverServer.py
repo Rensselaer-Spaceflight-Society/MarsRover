@@ -16,7 +16,7 @@ while True:
             data = client_socket.recv(1024)
         except bluetooth.btcommon.BluetoothError as err:
             print("Bluetooth Connection Lost or Terminated {}".format(err))
-            break
+            # break
 
         if len(data) == 0:
             break
