@@ -2,8 +2,8 @@ import RPi.GPIO as GPIO
 import time
 
 # GPIO pin numbers
-DIR_PIN = 20  # Direction GPIO pin
-STEP_PIN = 21  # Step GPIO pin
+STEP_PIN = 20  # Step GPIO pin
+DIR_PIN = 21  # Direction GPIO pin
 ENABLE_PIN = 16  # Enable GPIO pin (optional)
 
 # Setup
@@ -38,11 +38,11 @@ if __name__ == "__main__":
         enable_motor()
         
         # Rotate motor 200 steps clockwise (1 revolution if 200 steps/rev motor)
-        stepper_motor(2000, 'cw', 0.0001)
+        stepper_motor(2000, 'cw', 0.01)
 
         # Rotate motor 200 steps counterclockwise
         time.sleep(1)
-        stepper_motor(2000, 'ccw', 0.0001)
+        # stepper_motor(2000, 'ccw', 0.1)
 
     except KeyboardInterrupt:
         print("Program stopped")
