@@ -1,4 +1,5 @@
 import cv2
+import os
 
 # List cameras
 def list_cameras():
@@ -22,11 +23,14 @@ def select_camera():
 
 # Capture a photo from the selected camera
 
-def capture_photo(camera):
+def capture_photo(camera) -> tuple[bool, cv2.typing.MatLike | None]:
     camera = cv2.VideoCapture(camera)
-    ret, frame = camera.read()
-    camera.release()
-    return frame
+    if camera.isOpened():
+        frame = camera.read()
+        camera.release()
+        return frame
+    
+    return (False, None)
 
 # Tell the user to rotate the camera x degrees
 
@@ -37,25 +41,56 @@ def rotate_camera(degrees):
 
 def crop_photo(photo, pixels):
     height, width = photo.shape[:2]
-    return photo[0:height, pixels:width-pixels]
+    cropped_photo = photo[0:height, pixels:width-pixels]
+    return cropped_photo
 
 # Stitch the photos together into a panorama
 def stitch_photos(photos):
-    stitcher = cv2.Stitcher()
+    stitcher = cv2.createStitcher()
     status, panorama = stitcher.stitch(photos)
-    if status != 0:
-        print("Error stitching photos")
+    if status != cv2.Stitcher_OK:
+        print(f"Error stitching photos. Status code: {status}")
         return None
     return panorama
 
 # Save the panorama to a file
 
 def save_panorama(panorama, filename):
-    cv2.imwrite(filename, panorama)
+    if panorama is not None:
+        directory = os.path.dirname(filename)
+        if directory and not os.path.exists(directory):
+            try:
+                os.makedirs(directory)
+                print(f"Directory {directory} created.")
+            except Exception as e:
+                print(f"Error creating directory {directory}: {e}")
+                return
+        success = cv2.imwrite(filename, panorama)
+        if success:
+            print(f"Panorama successfully saved to {filename}")
+        else:
+            print(f"Error saving panorama to {filename}")
+    else:
+        print("Error: No panorama to save.")
 
 # Save a photo to a file
 def save_photo(photo, filename):
-    cv2.imwrite(filename, photo)
+    if photo is not None:
+        directory = os.path.dirname(filename)
+        if directory and not os.path.exists(directory):
+            try:
+                os.makedirs(directory)
+                print(f"Directory {directory} created.")
+            except Exception as e:
+                print(f"Error creating directory {directory}: {e}")
+                return
+        success = cv2.imwrite(filename, photo)
+        if success:
+            print(f"Photo successfully saved to {filename}")
+        else:
+            print(f"Error saving photo to {filename}")
+    else:
+        print("Error: No photo to save.")
 
 # Main function
     
@@ -65,16 +100,22 @@ def main():
     _const_pixel_crop = 332
     photos = []
     for i in range(5):
-        photos.append(capture_photo(camera))
-        rotate_camera(_const_degree_rotation)
-    
+        photo = capture_photo(camera)
+        if not photo[0]:
+            print("Failed to take picture. ")
+            return
 
-    for i in range(5):
-        save_photo(photos[i], "photo{}.jpg".format(i))
-    
+        cropped_photo = crop_photo(photo[1], _const_pixel_crop)
+        rotate_camera(_const_degree_rotation)
+        photos.append(cropped_photo)
+        save_photo(cropped_photo, "photo{}.jpg".format(i))
+
     panorama = stitch_photos(photos)
-    save_panorama(panorama, "panorama.jpg")
-    print("Panorama saved to panorama.jpg")
+    if panorama is not None:
+        save_panorama(panorama, "panorama.jpg")
+        print("Panorama saved to panorama.jpg")
+    else:
+        print("Error: Panorama creation failed.")
 
 if __name__ == "__main__":
     main()
