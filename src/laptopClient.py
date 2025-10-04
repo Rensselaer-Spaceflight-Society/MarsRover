@@ -2,6 +2,8 @@ from ControlClient.MainWindow import MainWindow
 from PySide6 import QtCore, QtWidgets, QtGui
 import sys
 
+# Hello World
+
 def main(argc: int, argv: list[str]) -> int:
     app = QtWidgets.QApplication(argv)
     window = MainWindow()
