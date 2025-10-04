@@ -1,5 +1,6 @@
 from PySide6 import QtCore, QtWidgets, QtGui
 
+
 class MovementWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -20,7 +21,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.setLayout(QtWidgets.QHBoxLayout())
 
         self.rover_picture = QtWidgets.QLabel()
-        self.rover_picture.setPixmap(QtGui.QPixmap("placeholder.jpg"))
+        self.rover_picture.setPixmap(QtGui.QPixmap("ControlClient/components/placeholder.jpg"))
 
         self.leftButton = QtWidgets.QPushButton("Left")
         self.rightButton = QtWidgets.QPushButton("Right")

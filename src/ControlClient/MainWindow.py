@@ -1,21 +1,24 @@
-from PySide6 import QtCore, QtWidgets, QtGui
-from ControlClient.components.MovementWidget import MovementWidget
-from ControlClient.components.SoilCollectionWidget import SoilCollectionWidget
-from ControlClient.components.PanoramaWidget import PanoramaWidget
-from ControlClient.components.SensorWidget import SensorWidget
-from ControlClient.components.CustomCommandWidget import CustomCommandWidget
+from PySide6 import QtCore, QtWidgets, QtGui, QtBluetooth
+from ControlClient.Components.MovementWidget import MovementWidget
+from ControlClient.Components.SoilCollectionWidget import SoilCollectionWidget
+from ControlClient.Components.PanoramaWidget import PanoramaWidget
+from ControlClient.Components.SensorWidget import SensorWidget
+from ControlClient.Components.CustomCommandWidget import CustomCommandWidget
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Control Client")
-
-        self.setLayout(QtWidgets.QHBoxLayout())
-
         self.setCentralWidget(CentralWidget())
-        
 
 class CentralWidget(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setLayout(QtWidgets.QVBoxLayout())
+        self.layout().addWidget(QLine(QtWidgets.QFrame.Shape.HLine))
+        self.layout().addWidget(RoverControlWidget())
+
+class RoverControlWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setLayout(QtWidgets.QHBoxLayout())
@@ -28,6 +31,8 @@ class CentralWidget(QtWidgets.QWidget):
         self.layout().addWidget(self.seperator)
         self.layout().addWidget(self.right_widget)
 
+
+        
 class LeftWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -35,8 +40,6 @@ class LeftWidget(QtWidgets.QWidget):
         self.layout().addWidget(MovementWidget())
         self.layout().addWidget(QLine(QtWidgets.QFrame.Shape.HLine))
         self.layout().addWidget(SoilCollectionWidget())
-        
-
 
 class RightWidget(QtWidgets.QWidget):
     def __init__(self):
