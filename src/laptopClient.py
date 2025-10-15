@@ -35,6 +35,26 @@ class Rover_Cont_Pan(QMainWindow):
         self.quadrant4_layout=QVBoxLayout(self.Q4)
         self.main_layout.addWidget(self.Q4,2,2)
 
+        # Center: Temp and Humidity Sensor Output
+        self.center_widget = QWidget()
+        self.center_layout = QVBoxLayout(self.center_widget)
+        self.center_layout.addWidget(QLabel("Center: Sensor Readings"))
+        self.main_layout.addWidget(self.center_widget, 1, 1) # Row 1, Col 1
+
+        # Placeholder for spacing (optional, but good for visual separation)
+        self.main_layout.setRowStretch(0, 1)
+        self.main_layout.setRowStretch(1, 1)
+        self.main_layout.setRowStretch(2, 1)
+        self.main_layout.setColumnStretch(0, 1)
+        self.main_layout.setColumnStretch(1, 1)
+        self.main_layout.setColumnStretch(2, 1)
+
+        self.setup_quadrant1()
+        self.setup_quadrant2()
+        self.setup_quadrant3()
+        self.setup_quadrant4()
+        self.setup_center_sensors()
+
 def main(argc: int, argv: list[str]) -> int:
     app = QtWidgets.QApplication(argv)
     window = MainWindow()
@@ -47,6 +67,4 @@ def main(argc: int, argv: list[str]) -> int:
     return app.exec()
 
 if __name__ == "__main__":
-    #sys.exit(main(len(sys.argv), sys.argv))
-
-    
+    sys.exit(main(len(sys.argv), sys.argv))
