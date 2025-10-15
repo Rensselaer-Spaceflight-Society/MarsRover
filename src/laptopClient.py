@@ -18,7 +18,7 @@ class Rover_Cont_Pan(QMainWindow):
 
         self.Q1=QWidget()
         self.Q1_layout=QVBoxLayout(self.Q1)
-        self.main_layout.addWidget(self.quadrant1_widget,0,0)
+        self.main_layout.addWidget(self.Q1,0,0)
 
         # Quad 2: Camera/Panorama
         self.Q2=QWidget()
