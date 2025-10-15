@@ -20,8 +20,20 @@ class Rover_Cont_Pan(QMainWindow):
         self.Q1_layout=QVBoxLayout(self.Q1)
         self.main_layout.addWidget(self.quadrant1_widget,0,0)
 
+        # Quad 2: Camera/Panorama
+        self.Q2=QWidget()
+        self.Q2=QVBoxLayout(self.Q2)
+        self.main_layout.addWidget(self.Q2,0,2)
 
+        # Quad 3: Soil Collection
+        self.Q3=QWidget()
+        self.quadrant3_layout=QVBoxLayout(self.Q3)
+        self.main_layout.addWidget(self.Q3,2,0)
 
+        # Quad 4: Custom Panel
+        self.Q4=QWidget()
+        self.quadrant4_layout=QVBoxLayout(self.Q4)
+        self.main_layout.addWidget(self.Q4,2,2)
 
 def main(argc: int, argv: list[str]) -> int:
     app = QtWidgets.QApplication(argv)
