@@ -19,14 +19,14 @@ def start_server():
                 while True:
                     data = conn.recv(BUFFER_SIZE)
                     try: 
-                        command = Command(data)
-                        conn.send(bytes(handle_command(command)))
+                        command = Command(str(data))
+                        conn.send(bytes(handle_command(command), encoding="utf-8"))
                         if command.commandType == "Disconnect":
                             conn.close()
                     except ValueError as err:
-                        conn.send(bytes("400: Unable to Parse Command"))
+                        conn.send(bytes("400: Unable to Parse Command", encoding="utf-8"))
                     except Exception as err:
-                        conn.send(bytes("500: Internal Error"))
+                        conn.send(bytes("500: Internal Error", encoding="utf-8"))
                         error_message = traceback.format_exc()
                         conn.send(error_message)
 
