@@ -19,7 +19,9 @@ def start_server():
                 while True:
                     data = conn.recv(BUFFER_SIZE)
                     try: 
-                        command = Command(str(data))
+                        command = Command(data.decode())
+                        print(command.commandType)
+                        print(command.commandArgs)
                         conn.send(bytes(handle_command(command), encoding="utf-8"))
                         if command.commandType == "Disconnect":
                             conn.close()
