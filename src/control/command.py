@@ -17,7 +17,7 @@ class Command:
             return
 
         if commandString is not None:
-            command_parts = shlex.split(command_str)
+            command_parts = shlex.split(commandString)
             self.commandType = command_parts[0]
             self.commandArgs = command_parts[1:]
             return
