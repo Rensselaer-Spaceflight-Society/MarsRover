@@ -434,6 +434,10 @@ class RoverControlPanel(QMainWindow):
             # Wait for response
             response = self.socket.recv(1024).decode('utf-8').strip()
             self.log(f"Rover: {response}")
+            
+            # Check if this was a Disconnect command
+            if text.lower() == 'disconnect':
+                self.disconnect_from_rover()
         
         except Exception as e:
             self.log(f"Error: {e}")
