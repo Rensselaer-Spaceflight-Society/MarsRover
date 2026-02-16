@@ -10,6 +10,7 @@ BUFFER_SIZE = 2**20
 def start_server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((HOST, PORT))
+        print(f"Listening on {HOST}:{PORT}")
         while True:
             s.listen()
             conn, addr = s.accept()

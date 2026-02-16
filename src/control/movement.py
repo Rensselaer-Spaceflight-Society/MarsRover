@@ -1,14 +1,14 @@
-from motors.dc_motor import DRV8871
+from .motors.dc_motor import DRV8871
 
 LEFT_IN_1_PIN = 17
 LEFT_IN_2_PIN = 18
 
-LEFT_SIDE_MOTOR = DRV8871(in1_pin=LEFT_IN_1_PIN, in2_pin=LEFT_IN_2_PIN)
+LEFT_SIDE_MOTOR = DRV8871(in1_pin=LEFT_IN_1_PIN, in2_pin=LEFT_IN_2_PIN, pwm_freq=1000)
 
 RIGHT_IN_1_PIN = 22
 RIGHT_IN_2_PIN = 23
 
-RIGHT_SIDE_MOTOR = DRV8871(in1_pin=RIGHT_IN_1_PIN, in2_pin=RIGHT_IN_2_PIN)
+RIGHT_SIDE_MOTOR = DRV8871(in1_pin=RIGHT_IN_1_PIN, in2_pin=RIGHT_IN_2_PIN, pwm_freq=1000)
 
 def setup():
     LEFT_SIDE_MOTOR.setup()
