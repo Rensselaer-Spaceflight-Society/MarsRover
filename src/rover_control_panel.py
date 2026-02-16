@@ -22,7 +22,7 @@ class ConnectionDialog(QDialog):
         ip_layout = QHBoxLayout()
         ip_label = QLabel("Raspberry Pi IP:")
         self.ip_input = QLineEdit()
-        self.ip_input.setText("spaceflight")  #192.168.2.2
+        self.ip_input.setText("spaceflight-pi.local")  #192.168.2.2
         ip_layout.addWidget(ip_label)
         ip_layout.addWidget(self.ip_input)
         layout.addLayout(ip_layout)
@@ -383,22 +383,13 @@ class RoverControlPanel(QMainWindow):
                     self.socket = None
     
     def disconnect_from_rover(self):
-        """Disconnect from Raspberry Pi"""
         if self.socket:
             try:
-                self.send_command('stop')
-                self.socket.close()
+                self.socket.sendall(b'Disconnect')  # Correct
+                #self.socket.close()
             except:
                 pass
             self.socket = None
-        
-        self.connected = False
-        self.conn_status_label.setText("Disconnected")
-        self.conn_status_label.setStyleSheet("color: red; font-weight: bold;")
-        self.btn_connect.setEnabled(True)
-        self.btn_disconnect.setEnabled(False)
-        self.status.showMessage("Disconnected from rover")
-        self.log("Disconnected from rover")
     
     def send_command(self, command, value=None):
         if not self.connected or not self.socket:
@@ -484,8 +475,8 @@ class RoverControlPanel(QMainWindow):
         self.log("Command: Turn right")
     
     def stop_movement(self):
-        self.socket.sendall(b'Disconnect')
-        self.log("Command: Disconnect")
+        self.send_command('S')
+        self.log("Command: Stop Movement")
 
     # --- Camera ---
     def take_picture(self):
@@ -529,14 +520,13 @@ class RoverControlPanel(QMainWindow):
         self.log(f"Mode: {self.mode_dropdown.currentText()}")
     
     def set_speed(self, val):
-        self.send_command('set_speed', val)
-        self.log(f"Speed set to {val}")
+        self.log(f"Speed set to {val}% (will apply on next movement command)")
     
     def check_payload(self, idx):
         self.log(f"Payload: {self.payload_dropdown.currentText()}")
 
     def emergency_stop(self):
-        self.send_command('emergency_stop')
+        self.send_command('Stop')
         self.log("!!! EMERGENCY STOP ACTIVATED !!!")
 
     # --- Sensors ---
