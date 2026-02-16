@@ -390,6 +390,13 @@ class RoverControlPanel(QMainWindow):
             except:
                 pass
             self.socket = None
+        self.connected = False
+        self.conn_status_label.setText("Disconnected")
+        self.conn_status_label.setStyleSheet("color: red; font-weight: bold;")
+        self.btn_connect.setEnabled(True)
+        self.btn_disconnect.setEnabled(False)
+        self.status.showMessage("Disconnected from rover")
+        self.log("Disconnected from rover")
     
     def send_command(self, command, value=None):
         if not self.connected or not self.socket:
