@@ -31,7 +31,7 @@ def start_server():
                     except Exception as err:
                         conn.send(bytes("500: Internal Error", encoding="utf-8"))
                         error_message = traceback.format_exc()
-                        conn.send(error_message)
+                        conn.send(error_message.encode())
 
 def rover_setup():
     movement.setup()
