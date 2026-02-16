@@ -386,7 +386,7 @@ class RoverControlPanel(QMainWindow):
         if self.socket:
             try:
                 self.socket.sendall(b'Disconnect')  # Correct
-                self.socket.close()
+                #self.socket.close()
             except:
                 pass
             self.socket = None
