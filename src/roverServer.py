@@ -3,7 +3,7 @@ from control.command import Command
 from control import movement
 import traceback
 
-HOST = '127.0.0.1'
+HOST = '0.0.0.0'
 PORT = 65432
 BUFFER_SIZE = 2**20
 
@@ -20,13 +20,13 @@ def start_server():
                     data = conn.recv(BUFFER_SIZE)
                     try: 
                         command = Command(data)
-                        conn.send(handle_command(command))
+                        conn.send(bytes(handle_command(command)))
                         if command.commandType == "Disconnect":
                             conn.close()
                     except ValueError as err:
-                        conn.send("400: Unable to Parse Command")
+                        conn.send(bytes("400: Unable to Parse Command"))
                     except Exception as err:
-                        conn.send("500: Internal Error")
+                        conn.send(bytes("500: Internal Error"))
                         error_message = traceback.format_exc()
                         conn.send(error_message)
 
