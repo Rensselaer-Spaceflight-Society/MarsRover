@@ -1,3 +1,5 @@
+import shlex
+
 class Command:
     commandType: str
     commandArgs: "list[str]"
@@ -15,28 +17,13 @@ class Command:
             return
 
         if commandString is not None:
-            print("raw string: ", commandString)
-            commandString = commandString.strip()
-            commandParts: "list[str]" = []
-            lastCommandPartIndex: int = 0
-            # Split the command string into a list of strings
-            for i in enumerate(commandString, 0):
-                print(i)
-                if i[1] == " ":
-                    commandParts.append(commandString[lastCommandPartIndex : i[0]])
-                    lastCommandPartIndex = i[0] + 1
-                elif i[1] == '"':
-                    # Find the next quote
-                    commandString.find('"', i[0])
-                    # Add the string to the list
-                    commandParts.append(commandString[lastCommandPartIndex : i[0] + 1])
-                    lastCommandPartIndex = i[0] + 1
-
-            commandParts.append(commandString[lastCommandPartIndex:])
-            self.commandType = commandParts[0]
-            print(list(self.commandType))
-            self.commandArgs = commandParts[1:]
-        pass
+            command_parts = shlex.split(command_str)
+            self.commandType = command_parts[0]
+            self.commandArgs = command_parts[1:]
+            return
+        
+        self.commandType = "NoneCommand"
+        self.commandArgs = []
 
     def __str__(self) -> str:
         return self.commandType + " " + " ".join(self.commandArgs)
@@ -51,6 +38,9 @@ class Command:
 
     def __ne__(self, o: object) -> bool:
         return not self.__eq__(o)
+    
+    def __len__(self) -> int:
+        return len(self.commandArgs)
 
     def get_command_type(self) -> str:
         return self.commandType
@@ -63,5 +53,16 @@ class Command:
             return None
         return self.commandArgs[index]
 
-    def get_command_arg_count(self) -> int:
-        return len(self.commandArgs)
+    
+if __name__ == "__main__":
+    command_str = input("Enter a command string to parse: ")
+
+    command = Command(command_str)
+
+    print(f"Command Type: {command.get_command_type()}")
+    print("Command Args")
+
+    for i in command.get_command_args():
+        print(i)
+
+

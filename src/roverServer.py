@@ -1,23 +1,80 @@
 import socket
+from control.command import Command
+from control import movement
+import traceback
 
-HOST = 'localhost'
+HOST = '127.0.0.1'
 PORT = 65432
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 2**20
 
 def start_server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((HOST, PORT))
-        s.listen()
-        print(f"Server listening on {HOST}:{PORT}")
-        conn, addr = s.accept()
-        with conn:
-            print(f"Connected by {addr}")
-            while True:
-                data = conn.recv(BUFFER_SIZE)
-                if not data:
-                    break
-                print(f"Received: {data.decode()}")
-                conn.sendall(data)
+        while True:
+            s.listen()
+            conn, addr = s.accept()
+            rover_setup()
+            with conn:
+                while True:
+                    data = conn.recv(BUFFER_SIZE)
+                    try: 
+                        command = Command(data)
+                        conn.send(handle_command(command))
+                        if command.commandType == "Disconnect":
+                            conn.close()
+                    except ValueError as err:
+                        conn.send("400: Unable to Parse Command")
+                    except Exception as err:
+                        conn.send("500: Internal Error")
+                        error_message = traceback.format_exc()
+                        conn.send(error_message)
+
+def rover_setup():
+    movement.setup()
+
+def handle_command(command: Command) -> str:
+    match command.commandType:
+        case "Forward" | "F":
+            speed_float = 75
+            if len(command) > 0:
+                speed_float = float(command.get_command_arg(0))
+
+            movement.forward(speed_float)
+        case "Backward" | "B":
+            speed_float = 75
+            if len(command) > 0:
+                speed_float = float(command.get_command_arg(0))
+
+            movement.backward(speed_float)
+            pass
+        case "Left" | "L":
+            speed_float = 75
+            if len(command) > 0:
+                speed_float = float(command.get_command_arg(0))
+
+            movement.left(speed_float)
+            pass
+        case "Right" | "R":
+            speed_float = 75
+            if len(command) > 0:
+                speed_float = float(command.get_command_arg(0))
+
+            movement.right(speed_float)
+            pass
+        case "Stop" | "S":
+            movement.stop()
+            pass
+        case "Disconnect":
+            rover_cleanup()
+        case "TestConnect":
+            return "200: OK"
+        case _:
+            return "400: Unknown Command"
+        
+    return "200 OK"
+
+def rover_cleanup():
+    movement.cleanup()
 
 if __name__ == "__main__":
     start_server()
