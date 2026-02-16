@@ -25,6 +25,7 @@ def start_server():
                         conn.send(bytes(handle_command(command), encoding="utf-8"))
                         if command.commandType == "Disconnect":
                             conn.close()
+                            break
                     except ValueError as err:
                         conn.send(bytes("400: Unable to Parse Command", encoding="utf-8"))
                     except Exception as err:
