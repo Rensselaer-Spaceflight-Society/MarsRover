@@ -1,4 +1,4 @@
-from ..motors.dc_motor import DRV8871
+from motors.dc_motor import DRV8871
 
 LEFT_IN_1_PIN = 17
 LEFT_IN_2_PIN = 18
