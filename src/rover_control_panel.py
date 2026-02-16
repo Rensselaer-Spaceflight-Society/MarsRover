@@ -2,7 +2,6 @@
 import sys
 import os
 import socket
-import json
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout,
     QLabel, QPushButton, QComboBox, QSlider, QGroupBox, QFrame, QTextEdit,
@@ -402,17 +401,17 @@ class RoverControlPanel(QMainWindow):
         self.log("Disconnected from rover")
     
     def send_command(self, command, value=None):
-        """Send command to Raspberry Pi"""
         if not self.connected or not self.socket:
             self.log("Error: Not connected to rover")
             return False
         
         try:
-            data = {'command': command}
+            # Format command for your server
             if value is not None:
-                data['value'] = value
+                message = f"{command} {value}"
+            else:
+                message = command
             
-            message = json.dumps(data) + '\n'
             self.socket.sendall(message.encode('utf-8'))
             
             # Wait for response
@@ -426,7 +425,6 @@ class RoverControlPanel(QMainWindow):
             return False
     
     def send_text_command(self):
-        """Send text command from input field"""
         text = self.cmd_input.text().strip()
         if not text:
             return
@@ -439,10 +437,8 @@ class RoverControlPanel(QMainWindow):
             return
         
         try:
-            # Send as JSON with text_command type
-            data = {'command': 'text_command', 'text': text}
-            message = json.dumps(data) + '\n'
-            self.socket.sendall(message.encode('utf-8'))
+            # Send raw text command to your server
+            self.socket.sendall(text.encode('utf-8'))
             
             # Wait for response
             response = self.socket.recv(1024).decode('utf-8').strip()
@@ -472,24 +468,24 @@ class RoverControlPanel(QMainWindow):
 
     # --- Movement callbacks ---
     def move_forward(self):
-        self.send_command('forward')
+        self.send_command('F')
         self.log("Command: Move forward")
     
     def move_backward(self):
-        self.send_command('backward')
+        self.send_command('B')
         self.log("Command: Move backward")
     
     def move_left(self):
-        self.send_command('left')
+        self.send_command('L')
         self.log("Command: Turn left")
     
     def move_right(self):
-        self.send_command('right')
+        self.send_command('R')
         self.log("Command: Turn right")
     
     def stop_movement(self):
-        self.send_command('stop')
-        self.log("Command: Stop")
+        self.socket.sendall(b'Disconnect')
+        self.log("Command: Disconnect")
 
     # --- Camera ---
     def take_picture(self):
